@@ -14,7 +14,6 @@ namespace Dapper.Contrib.Postgres
         
         public static long Insert<T>(this IDbConnection connection, T entity)
         {
-            var sql = "INSERT INTO tableName (columnName) VALUES (columnNames);";
             return 0;
         }
 
@@ -23,6 +22,15 @@ namespace Dapper.Contrib.Postgres
             return typeof(T)
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Select(GetColumnName<T>)
+                .ToList();
+        }
+
+        public static List<string> GetParameters<T>()
+        {
+            return typeof(T)
+                .GetProperties()
+                .Select(p => p.Name)
+                .Select(p => "@" + p)
                 .ToList();
         }
         
