@@ -14,7 +14,9 @@ namespace Dapper.Contrib.Postgres
         
         public static long Insert<T>(this IDbConnection connection, T entity)
         {
-            return 0;
+            var sql = GetInsertSql<T>();
+
+            return connection.QueryFirstOrDefault<long>(sql, entity);
         }
         
         public static string GetInsertSql<T>()
@@ -25,8 +27,10 @@ namespace Dapper.Contrib.Postgres
             var columns = "(" + string.Join(',', columnNames) + ")";
             var values = "VALUES";
             var parameters = "(" + string.Join(',', GetParameters<T>()) + ")";
+            var keyName = GetKeyName<T>();
+            var returningClause = keyName != null ? $"RETURNING {GetKeyName<T>()}" : "";
 
-            return $"{insertInto} {tableName} {columns} {values} {parameters};";
+            return $"{insertInto} {tableName} {columns} {values} {parameters} {returningClause};";
         }
 
         public static List<string> GetColumnNames<T>()
@@ -35,6 +39,30 @@ namespace Dapper.Contrib.Postgres
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Select(GetColumnName<T>)
                 .ToList();
+        }
+
+        public static string GetKeyName<T>()
+        {
+            var properties = typeof(T)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            var idProperty = properties.FirstOrDefault(p =>
+                p.Name == "Id" || p.Name == "\"Id\"");
+
+            if (idProperty != null)
+            {
+                return GetColumnName<T>(idProperty);
+            }
+
+            var keyProperty = properties.FirstOrDefault(p =>
+                p.GetCustomAttributes(typeof(KeyAttribute), false).Any());
+
+            if (keyProperty != null)
+            {
+                return GetColumnName<T>(keyProperty);
+            }
+
+            return null;
         }
 
         public static List<string> GetParameters<T>()
