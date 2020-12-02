@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dapper.Contrib.Postgres", "src\Dapper.Contrib.Postgres.csproj", "{D98436F5-F44E-4EED-A8EA-4AAA693619EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dapper.Contrib.Postgres.Tests", "Dapper.Contrib.Postgres.Tests\Dapper.Contrib.Postgres.Tests.csproj", "{90F47DC4-9526-4387-9ED5-0FA141C88C31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{D98436F5-F44E-4EED-A8EA-4AAA693619EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D98436F5-F44E-4EED-A8EA-4AAA693619EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D98436F5-F44E-4EED-A8EA-4AAA693619EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90F47DC4-9526-4387-9ED5-0FA141C88C31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90F47DC4-9526-4387-9ED5-0FA141C88C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90F47DC4-9526-4387-9ED5-0FA141C88C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90F47DC4-9526-4387-9ED5-0FA141C88C31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
