@@ -31,7 +31,7 @@ namespace Dapper.Contrib.Postgres.Tests.Tests
         }
         
         [Test]
-        public void ShouldGetColumns()
+        public void ShouldGetColumns_WhenColumnAttributesAreDefined()
         {
             var names = Extensions.GetColumnNames<TestClassWithMultipleProperties>();
 
@@ -42,10 +42,28 @@ namespace Dapper.Contrib.Postgres.Tests.Tests
         }
         
         [Test]
-        public void ShouldGetTableNameWithPluralIdentifier()
+        public void ShouldGetTableName_WithPluralIdentifier()
         {
             var expected = nameof(TestClassWithMultipleProperties);
             var tableName = Extensions.GetTableName<TestClassWithMultipleProperties>();
+
+            expected.Should().Be(tableName);
+        }
+        
+        [Test]
+        public void ShouldNotGetTableName_WithQuotedAttributes()
+        {
+            var expected = nameof(TestClassWithQuotedIdentifiersAttribute) + "s";
+            var tableName = Extensions.GetTableName<TestClassWithMultipleProperties>();
+
+            expected.Should().NotBe(tableName);
+        }
+        
+        [Test]
+        public void ShouldGetTableName_WithQuotedAttributes()
+        {
+            var expected = "MyTable";
+            var tableName = Extensions.GetTableName<TestClassWithQuotedIdentifiersAndTableAttribute>();
 
             expected.Should().Be(tableName);
         }
