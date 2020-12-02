@@ -4,7 +4,7 @@ using System.Data.SQLite;
 
 namespace Dapper.Contrib.Postgres.IntegrationTests
 {
-    public class SqLiteConnectionFactory : IDbConnectionFactory
+    public class SQLiteConnectionFactory : IDbConnectionFactory
     {
         public DbConnection CreateConnection(string nameOrConnectionString)
         {
