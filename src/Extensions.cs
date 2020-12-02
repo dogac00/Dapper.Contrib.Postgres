@@ -16,6 +16,18 @@ namespace Dapper.Contrib.Postgres
         {
             return 0;
         }
+        
+        public static string GetInsertSql<T>()
+        {
+            var insertInto = @"INSERT INTO";
+            var tableName = GetTableName<T>();
+            var columnNames = GetColumnNames<T>();
+            var columns = "(" + string.Join(',', columnNames) + ")";
+            var values = "VALUES";
+            var parameters = "(" + string.Join(',', GetParameters<T>()) + ")";
+
+            return $"{insertInto} {tableName} {columns} {values} {parameters};";
+        }
 
         public static List<string> GetColumnNames<T>()
         {
