@@ -14,6 +14,14 @@ namespace Dapper.Contrib.Postgres.Helpers
                 .FirstOrDefault();
         }
         
+        public static KeyAttribute GetKeyAttribute<T>()
+        {
+            return typeof(T)
+                .GetCustomAttributes(typeof(KeyAttribute), false)
+                .Cast<KeyAttribute>()
+                .FirstOrDefault();
+        }
+        
         public static TableAttribute GetTableAttribute<T>()
         {
             return typeof(T)
