@@ -14,7 +14,7 @@ namespace Dapper.Contrib.Postgres.Tests.Tests
             var propertyInfo = typeof(TestClassWithColumnAttribute)
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .First();
-            var columnName = Extensions.GetColumnName(propertyInfo);
+            var columnName = Extensions.GetColumnName<TestClassWithColumnAttribute>(propertyInfo);
 
             columnName.Should().Be("BirthDate");
         }
@@ -25,9 +25,29 @@ namespace Dapper.Contrib.Postgres.Tests.Tests
             var propertyInfo = typeof(TestClassWithoutColumnAttribute)
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .First();
-            var columnName = Extensions.GetColumnName(propertyInfo);
+            var columnName = Extensions.GetColumnName<TestClassWithColumnAttribute>(propertyInfo);
 
-            columnName.Should().Be("\"BirthDateColumn\"");
+            columnName.Should().Be("BirthDateColumn");
+        }
+        
+        [Test]
+        public void ShouldGetColumns()
+        {
+            var names = Extensions.GetColumnNames<TestClassWithMultipleProperties>();
+
+            names.Contains("MyId").Should().BeTrue();
+            names.Contains("MyDate").Should().BeTrue();
+            names.Contains("Name").Should().BeTrue();
+            names.Contains("Money").Should().BeTrue();
+        }
+        
+        [Test]
+        public void ShouldGetTableNameWithPluralIdentifier()
+        {
+            var expected = nameof(TestClassWithMultipleProperties);
+            var tableName = Extensions.GetTableName<TestClassWithMultipleProperties>();
+
+            expected.Should().Be(tableName);
         }
     }
 }

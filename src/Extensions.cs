@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
 using Dapper.Contrib.Postgres.Attributes;
+using Dapper.Contrib.Postgres.Helpers;
 using Pluralize.NET.Core;
 
 namespace Dapper.Contrib.Postgres
@@ -12,43 +14,56 @@ namespace Dapper.Contrib.Postgres
         
         public static long Insert<T>(this IDbConnection connection, T entity)
         {
-            
+            var sql = "INSERT INTO tableName (columnName) VALUES (columnNames);";
             return 0;
         }
 
-        public static string GetColumnName(PropertyInfo property)
+        public static List<string> GetColumnNames<T>()
         {
-            var columnAttributes = property
-                .GetCustomAttributes(typeof(ColumnAttribute), false)
-                .Cast<ColumnAttribute>()
+            return typeof(T)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Select(GetColumnName<T>)
                 .ToList();
+        }
+        
+        public static string GetColumnName<T>(PropertyInfo property)
+        {
+            var columnAttribute = AttributeHelper.GetColumnAttribute(property);
 
-            if (!columnAttributes.Any())
+            if (columnAttribute != null)
             {
-                return $"\"{ property.Name }\"";
+                return columnAttribute.Name;
+            }
+            
+            var useQuotesAttribute = AttributeHelper.GetUseQuotedIdentifiersAttribute<T>();
+            
+            if (useQuotesAttribute != null)
+            {
+                return property.Name.AddQuotes();
             }
 
-            return columnAttributes
-                .First()
-                .Name;
+            return property.Name;
         }
 
         public static string GetTableName<T>()
         {
-            var tableAttributes = typeof(T)
-                .GetCustomAttributes(typeof(TableAttribute), false)
-                .Cast<TableAttribute>()
-                .ToList();
+            var typeName = typeof(T).Name;
+            var pluralTypeName = _pluralizer.Pluralize(typeName);
+            var tableAttribute = AttributeHelper.GetTableAttribute<T>();
 
-            if (!tableAttributes.Any())
+            if (tableAttribute != null)
             {
-                var typeName = typeof(T).Name;
-                return _pluralizer.Pluralize(typeName);
+                return tableAttribute.Name;
+            }
+            
+            var useQuotesAttributes = AttributeHelper.GetUseQuotedIdentifiersAttribute<T>();
+
+            if (useQuotesAttributes != null)
+            {
+                return pluralTypeName.AddQuotes();
             }
 
-            return tableAttributes
-                .First()
-                .Name;
+            return pluralTypeName;
         }
     }
 }
