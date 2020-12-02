@@ -4,18 +4,20 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.TestTypes
 {
     public static class QueryHelper
     {
-        private static string RemoveReturningClause(string sql)
+        private static string TryRemoveReturningClause(string sql)
         {
             var returningIndex = sql.IndexOf("RETURNING ", StringComparison.Ordinal);
 
-            return sql.Substring(0, returningIndex);
+            return returningIndex == -1 
+                ? sql 
+                : sql.Substring(0, returningIndex);
         }
 
         public static string GetInsertSqlForSqLite<T>()
         {
             var postgresInsert = Extensions.GetInsertSql<T>();
 
-            return RemoveReturningClause(postgresInsert);
+            return TryRemoveReturningClause(postgresInsert);
         }
     }
 }
