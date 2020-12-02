@@ -1,6 +1,6 @@
 using System;
 
-namespace Dapper.Contrib.Postgres.Tests.Tests
+namespace Dapper.Contrib.Postgres.Tests.TestTypes
 {
     public class TestClassWithoutColumnAttribute
     {

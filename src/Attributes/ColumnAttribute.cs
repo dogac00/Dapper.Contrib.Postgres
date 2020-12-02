@@ -1,6 +1,6 @@
 using System;
 
-namespace Dapper.Contrib.Postgres
+namespace Dapper.Contrib.Postgres.Attributes
 {
     public class ColumnAttribute : Attribute
     {
