@@ -1,5 +1,6 @@
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using Dapper.Contrib.Postgres.Attributes;
 using Pluralize.NET.Core;
 
@@ -11,7 +12,25 @@ namespace Dapper.Contrib.Postgres
         
         public static long Insert<T>(this IDbConnection connection, T entity)
         {
+            
             return 0;
+        }
+
+        public static string GetColumnName(PropertyInfo property)
+        {
+            var columnAttributes = property
+                .GetCustomAttributes(typeof(ColumnAttribute), false)
+                .Cast<ColumnAttribute>()
+                .ToList();
+
+            if (!columnAttributes.Any())
+            {
+                return $"\"{ property.Name }\"";
+            }
+
+            return columnAttributes
+                .First()
+                .Name;
         }
 
         public static string GetTableName<T>()
