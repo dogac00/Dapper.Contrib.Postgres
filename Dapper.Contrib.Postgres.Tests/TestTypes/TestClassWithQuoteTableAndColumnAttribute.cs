@@ -1,7 +1,7 @@
 using System;
 using Dapper.Contrib.Postgres.Attributes;
 
-namespace Dapper.Contrib.Postgres.Tests.Tests
+namespace Dapper.Contrib.Postgres.Tests.TestTypes
 {
     [UseQuotedIdentifiers]
     [Table("MyTestTable")]
