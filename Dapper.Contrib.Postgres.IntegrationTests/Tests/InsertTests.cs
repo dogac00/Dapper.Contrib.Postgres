@@ -19,36 +19,49 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
         public override async Task OneTimeSetUp()
         {
             await base.OneTimeSetUp();
+
+            await DropTables();
             
+            await CreateTables();
+        }
+        
+        [OneTimeTearDown]
+        public async Task OneTimeTearDown()
+        {
+            await DropTables();
+        }
+
+        private async Task CreateTables()
+        {
             _connectionFactory = GetRequiredService<IDbConnectionFactory>();
 
             var connection = _connectionFactory.CreateConnection(null);
-            
-            await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS ""Employee1s""
+
+            await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS ""Employees""
                                               (
                                                 ""Id"" bigint primary key not null,
                                                 ""Name"" text
                                               )");
-            
+
             await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS MyEmployees
                                               (
                                                 MyFirstName text,
                                                 MyLastName text
                                               )");
-            
+
             await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS EmployeeTable
                                               (
                                                 ""EmployeeId"" bigint,
                                                 EmployeeName text
                                               )");
-            
+
             await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS Employee4s
                                               (
                                                 Id bigint,
                                                 Name text,
                                                 DateUnixTimestamp bigint
                                               )");
-            
+
             await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS ""Employee5""
                                               (
                                                 ""Id"" bigint,
@@ -56,19 +69,18 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
                                                 ""Money"" numeric
                                               )");
         }
-        
-        [OneTimeTearDown]
-        public async Task OneTimeTearDown()
+
+        private async Task DropTables()
         {
             _connectionFactory = GetRequiredService<IDbConnectionFactory>();
 
             var connection = _connectionFactory.CreateConnection(null);
-            
+
             await connection.ExecuteAsync(@"DROP TABLE IF EXISTS ""Employee1s""");
             await connection.ExecuteAsync(@"DROP TABLE IF EXISTS MyEmployees");
             await connection.ExecuteAsync(@"DROP TABLE IF EXISTS EmployeeTable");
             await connection.ExecuteAsync(@"DROP TABLE IF EXISTS Employee4s");
-            await connection.ExecuteAsync(@"DROP TABLE IF EXISTS Employee5");
+            await connection.ExecuteAsync(@"DROP TABLE IF EXISTS ""Employee5""");
         }
 
         [SetUp]
@@ -81,17 +93,14 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
         public async Task ShouldInsert_WhenGivenEmployeeWithUseQuotedIdentifiersAttribute()
         {
             var connection = _connectionFactory.CreateConnection(null);
-            
-            var employeeGiven = _fixture.Create<Employee1>();
+            var employeeGiven = _fixture.Create<Employee>();
 
-            var sql = QueryHelper.GetInsertSqlForSqLite<Employee1>();
-
-            await connection.ExecuteAsync(sql, employeeGiven);
+            await DatabaseHelper.InsertGeneric(connection, employeeGiven);
 
             var employees =
-                await connection.QueryAsync<Employee1>(@"SELECT * FROM ""Employee1s""");
+                await connection.QueryAsync<Employee>(@"SELECT * FROM ""Employees""");
 
-            var employeeList = employees as List<Employee1> ?? employees.ToList();
+            var employeeList = employees as List<Employee> ?? employees.ToList();
             
             employeeList.Count.Should().Be(1);
             var employeeRetrieved = employeeList.FirstOrDefault();
@@ -107,9 +116,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
             
             var employeeGiven = _fixture.Create<Employee2>();
 
-            var sql = QueryHelper.GetInsertSqlForSqLite<Employee2>();
-
-            await connection.ExecuteAsync(sql, employeeGiven);
+            await DatabaseHelper.InsertGeneric(connection, employeeGiven);
 
             var employees =
                 await connection.QueryAsync<Employee2>(@"SELECT MyFirstName as FirstName,
@@ -131,12 +138,10 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
             
             var employeeGiven = _fixture.Create<Employee3>();
 
-            var sql = QueryHelper.GetInsertSqlForSqLite<Employee3>();
-
-            await connection.ExecuteAsync(sql, employeeGiven);
+            await DatabaseHelper.InsertGeneric(connection, employeeGiven);
 
             var employees =
-                await connection.QueryAsync<Employee3>(@"SELECT ""EmployeeId"", ""EmployeeName"" as Name 
+                await connection.QueryAsync<Employee3>(@"SELECT ""EmployeeId"", EmployeeName as Name 
                                                              FROM EmployeeTable");
 
             var employeeList = employees as List<Employee3> ?? employees.ToList();
@@ -154,9 +159,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
             
             var employeeGiven = _fixture.Create<Employee4>();
 
-            var sql = QueryHelper.GetInsertSqlForSqLite<Employee4>();
-
-            await connection.ExecuteAsync(sql, employeeGiven);
+            await DatabaseHelper.InsertGeneric(connection, employeeGiven);
 
             var employees =
                 await connection.QueryAsync<Employee4>(@"SELECT *
@@ -177,13 +180,11 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
             
             var employeeGiven = _fixture.Create<Employee5>();
 
-            var sql = QueryHelper.GetInsertSqlForSqLite<Employee5>();
-
-            await connection.ExecuteAsync(sql, employeeGiven);
+            await DatabaseHelper.InsertGeneric(connection, employeeGiven);
 
             var employees =
                 await connection.QueryAsync<Employee5>(@"SELECT *
-                                                             FROM Employee5");
+                                                             FROM ""Employee5""");
 
             var employeeList = employees as List<Employee5> ?? employees.ToList();
             
@@ -191,32 +192,6 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
             var employeeRetrieved = employeeList.FirstOrDefault();
             employeeRetrieved.Should().NotBeNull();
             employeeRetrieved.JsonEquals(employeeGiven).Should().BeTrue();
-        }
-        
-        [Test]
-        public async Task ShouldInsertInARow_WhenGivenEmployeeClassWithTableAndQuoteAttributes()
-        {
-            var connection = _connectionFactory.CreateConnection(null);
-            
-            var employeesGiven = _fixture
-                .CreateMany<Employee5>(10)
-                .ToList();
-
-            var sql = QueryHelper.GetInsertSqlForSqLite<Employee5>();
-
-            foreach (var employeeGiven in employeesGiven)
-            {
-                await connection.ExecuteAsync(sql, employeeGiven);
-            }
-
-            var employees =
-                await connection.QueryAsync<Employee5>(@"SELECT *
-                                                             FROM Employee5");
-
-            var employeesRetrieved = employees as List<Employee5> ?? employees.ToList();
-            
-            employeesRetrieved.Count.Should().Be(10);
-            employeesRetrieved.JsonEquals(employeesGiven).Should().BeTrue();
         }
     }
 }
