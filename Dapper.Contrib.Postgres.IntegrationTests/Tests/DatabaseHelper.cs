@@ -15,7 +15,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
             }
             else
             {
-                var sql = Extensions.GetInsertSql<Employee>();
+                var sql = QueryHelper.GetInsertSqlForSqLite<T>();
 
                 await connection.ExecuteAsync(sql, entity);
             }
