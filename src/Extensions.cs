@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Dapper.Contrib.Postgres.Attributes;
 using Dapper.Contrib.Postgres.Helpers;
 using Pluralize.NET.Core;
