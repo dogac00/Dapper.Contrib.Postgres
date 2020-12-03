@@ -26,7 +26,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
             
             await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS ""Employee1s""
                                               (
-                                                ""Id"" primary key not null,
+                                                ""Id"" bigint primary key not null,
                                                 ""Name"" text
                                               )");
             
