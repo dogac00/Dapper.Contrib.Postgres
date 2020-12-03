@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using AutoFixture;
 using Dapper.Contrib.Postgres.IntegrationTests.Helpers;
@@ -17,14 +15,15 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
         private IFixture _fixture;
         private IDbConnectionFactory _connectionFactory;
 
-        [SetUp]
-        public async Task SetUp()
+        [OneTimeSetUp]
+        public override async Task OneTimeSetUp()
         {
-            _fixture = new Fixture();
+            await base.OneTimeSetUp();
+            
             _connectionFactory = GetRequiredService<IDbConnectionFactory>();
 
             var connection = _connectionFactory.CreateConnection(null);
-
+            
             await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS ""Employee1s""
                                               (
                                                 ""Id"" primary key not null,
@@ -49,10 +48,17 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
                                                 Name text,
                                                 DateUnixTimestamp bigint
                                               )");
+            
+            await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS ""Employee5""
+                                              (
+                                                ""Id"" bigint,
+                                                ""Name"" text,
+                                                ""Money"" numeric
+                                              )");
         }
-
-        [TearDown]
-        public async Task TearDown()
+        
+        [OneTimeTearDown]
+        public async Task OneTimeTearDown()
         {
             _connectionFactory = GetRequiredService<IDbConnectionFactory>();
 
@@ -62,6 +68,13 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
             await connection.ExecuteAsync(@"DROP TABLE IF EXISTS MyEmployees");
             await connection.ExecuteAsync(@"DROP TABLE IF EXISTS EmployeeTable");
             await connection.ExecuteAsync(@"DROP TABLE IF EXISTS Employee4s");
+            await connection.ExecuteAsync(@"DROP TABLE IF EXISTS Employee5");
+        }
+
+        [SetUp]
+        public void SetUp()
+        {
+            _fixture = new Fixture();
         }
 
         [Test]
@@ -155,6 +168,55 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
             var employeeRetrieved = employeeList.FirstOrDefault();
             employeeRetrieved.Should().NotBeNull();
             employeeRetrieved.JsonEquals(employeeGiven).Should().BeTrue();
+        }
+        
+        [Test]
+        public async Task ShouldInsert_WhenGivenEmployeeClassWithTableAndQuoteAttributes()
+        {
+            var connection = _connectionFactory.CreateConnection(null);
+            
+            var employeeGiven = _fixture.Create<Employee5>();
+
+            var sql = QueryHelper.GetInsertSqlForSqLite<Employee5>();
+
+            await connection.ExecuteAsync(sql, employeeGiven);
+
+            var employees =
+                await connection.QueryAsync<Employee5>(@"SELECT *
+                                                             FROM Employee5");
+
+            var employeeList = employees as List<Employee5> ?? employees.ToList();
+            
+            employeeList.Count.Should().Be(1);
+            var employeeRetrieved = employeeList.FirstOrDefault();
+            employeeRetrieved.Should().NotBeNull();
+            employeeRetrieved.JsonEquals(employeeGiven).Should().BeTrue();
+        }
+        
+        [Test]
+        public async Task ShouldInsertInARow_WhenGivenEmployeeClassWithTableAndQuoteAttributes()
+        {
+            var connection = _connectionFactory.CreateConnection(null);
+            
+            var employeesGiven = _fixture
+                .CreateMany<Employee5>(10)
+                .ToList();
+
+            var sql = QueryHelper.GetInsertSqlForSqLite<Employee5>();
+
+            foreach (var employeeGiven in employeesGiven)
+            {
+                await connection.ExecuteAsync(sql, employeeGiven);
+            }
+
+            var employees =
+                await connection.QueryAsync<Employee5>(@"SELECT *
+                                                             FROM Employee5");
+
+            var employeesRetrieved = employees as List<Employee5> ?? employees.ToList();
+            
+            employeesRetrieved.Count.Should().Be(10);
+            employeesRetrieved.JsonEquals(employeesGiven).Should().BeTrue();
         }
     }
 }
