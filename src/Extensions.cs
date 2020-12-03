@@ -12,6 +12,13 @@ namespace Dapper.Contrib.Postgres
     {
         private static readonly Pluralizer _pluralizer = new Pluralizer();
         
+        public static async Task<long> InsertAsync<T>(this IDbConnection connection, T entity)
+        {
+            var sql = GetInsertSql<T>();
+
+            return await connection.QueryFirstOrDefaultAsync<long>(sql, entity);
+        }
+        
         public static long Insert<T>(this IDbConnection connection, T entity)
         {
             var sql = GetInsertSql<T>();
