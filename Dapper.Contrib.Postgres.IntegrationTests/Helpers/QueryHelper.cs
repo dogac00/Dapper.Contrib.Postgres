@@ -1,6 +1,6 @@
 using System;
 
-namespace Dapper.Contrib.Postgres.IntegrationTests.TestTypes
+namespace Dapper.Contrib.Postgres.IntegrationTests.Helpers
 {
     public static class QueryHelper
     {

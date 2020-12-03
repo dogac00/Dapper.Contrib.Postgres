@@ -1,5 +1,6 @@
 using System.Data;
 using System.Threading.Tasks;
+using Dapper.Contrib.Postgres.IntegrationTests.Helpers;
 using Dapper.Contrib.Postgres.IntegrationTests.TestTypes;
 using Npgsql;
 
