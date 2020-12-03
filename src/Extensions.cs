@@ -36,7 +36,7 @@ namespace Dapper.Contrib.Postgres
             var values = "VALUES";
             var parameters = "(" + string.Join(',', GetParameters<T>()) + ")";
             var keyName = GetKeyName<T>();
-            var returningClause = keyName != null ? $"RETURNING {GetKeyName<T>()}" : "";
+            var returningClause = keyName != null ? $"RETURNING {keyName}" : "";
 
             return $"{insertInto} {tableName} {columns} {values} {parameters} {returningClause};";
         }
