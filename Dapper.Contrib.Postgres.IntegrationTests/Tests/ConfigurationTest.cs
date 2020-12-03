@@ -2,7 +2,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 
-namespace Dapper.Contrib.Postgres.IntegrationTests
+namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
 {
     public class ConfigurationTest : IntegrationTestBase
     {

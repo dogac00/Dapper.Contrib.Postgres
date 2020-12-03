@@ -1,4 +1,4 @@
-namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
+namespace Dapper.Contrib.Postgres.IntegrationTests.TestTypes
 {
     public class Employee4
     {
