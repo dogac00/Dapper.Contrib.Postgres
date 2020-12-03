@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +14,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests
         private IServiceProvider _serviceProvider;
         
         [OneTimeSetUp]
-        public void OneTimeSetUp()
+        public virtual Task OneTimeSetUp()
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -27,6 +28,8 @@ namespace Dapper.Contrib.Postgres.IntegrationTests
             
             var testServer = new TestServer(webHostBuilder);
             _serviceProvider = testServer.Services;
+
+            return Task.CompletedTask;
         }
 
         protected T GetRequiredService<T>()
