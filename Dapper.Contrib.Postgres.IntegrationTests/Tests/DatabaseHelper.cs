@@ -23,7 +23,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
         
         public static async Task DropTables(IDbConnection connection)
         {
-            await connection.ExecuteAsync(@"DROP TABLE IF EXISTS ""Employee1s""");
+            await connection.ExecuteAsync(@"DROP TABLE IF EXISTS ""Employees""");
             await connection.ExecuteAsync(@"DROP TABLE IF EXISTS MyEmployees");
             await connection.ExecuteAsync(@"DROP TABLE IF EXISTS EmployeeTable");
             await connection.ExecuteAsync(@"DROP TABLE IF EXISTS Employee4s");
