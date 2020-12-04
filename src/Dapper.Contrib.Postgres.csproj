@@ -2,6 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Authors>Dogac Akyildiz</Authors>
+        <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/dogac00/Dapper.Contrib.Postgres</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
