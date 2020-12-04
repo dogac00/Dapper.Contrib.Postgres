@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace Dapper.Contrib.Postgres.Tests.Extensions
+namespace Dapper.Contrib.Postgres.Tests.Helpers
 {
     public static class StringExtensions
     {
@@ -9,6 +9,11 @@ namespace Dapper.Contrib.Postgres.Tests.Extensions
             return new string(value
                 .Where(c => !char.IsWhiteSpace(c))
                 .ToArray());
+        }
+        
+        public static string AddQuotes(this string value)
+        {
+            return $"\"{value}\"";
         }
     }
 }
