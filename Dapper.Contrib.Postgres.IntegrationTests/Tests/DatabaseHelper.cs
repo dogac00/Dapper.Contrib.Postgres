@@ -29,6 +29,9 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
             await connection.ExecuteAsync(@"DROP TABLE IF EXISTS Employee4s");
             await connection.ExecuteAsync(@"DROP TABLE IF EXISTS ""Employee5""");
             await connection.ExecuteAsync(@"DROP TABLE IF EXISTS ""Employee6Types""");
+            await connection.ExecuteAsync(@"DROP TABLE IF EXISTS ""UnquotedEmployees""");
+            await connection.ExecuteAsync(@"DROP TABLE IF EXISTS ""QuotedEmployees""");
+            await connection.ExecuteAsync(@"DROP TABLE IF EXISTS EmployeeWithDates");
         }
         
         public static async Task CreateTables(IDbConnection connection)
@@ -70,6 +73,24 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
                                                 ""Id"" bigint,
                                                 ""Name"" text,
                                                 ""Balance"" numeric
+                                              )");
+            
+            await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS ""UnquotedEmployees""
+                                              (
+                                                ""Id"" bigint,
+                                                ""Name"" text
+                                              )");
+            
+            await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS ""QuotedEmployees""
+                                              (
+                                                Id bigint,
+                                                Name text
+                                              )");
+            
+            await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS EmployeeWithDates
+                                              (
+                                                Id bigint,
+                                                BirthDate timestamp
                                               )");
         }
     }
