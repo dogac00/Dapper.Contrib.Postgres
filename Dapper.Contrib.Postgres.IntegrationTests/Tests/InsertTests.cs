@@ -20,67 +20,19 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
         {
             await base.OneTimeSetUp();
 
-            await DropTables();
+            _connectionFactory = GetRequiredService<IDbConnectionFactory>();
+
+            var connection = _connectionFactory.CreateConnection(null);
+
+            await DatabaseHelper.DropTables(connection);
             
-            await CreateTables();
+            await DatabaseHelper.CreateTables(connection);
         }
         
         [OneTimeTearDown]
         public async Task OneTimeTearDown()
         {
-            await DropTables();
-        }
-
-        private async Task CreateTables()
-        {
-            _connectionFactory = GetRequiredService<IDbConnectionFactory>();
-
-            var connection = _connectionFactory.CreateConnection(null);
-
-            await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS ""Employees""
-                                              (
-                                                ""Id"" bigint primary key not null,
-                                                ""Name"" text
-                                              )");
-
-            await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS MyEmployees
-                                              (
-                                                MyFirstName text,
-                                                MyLastName text
-                                              )");
-
-            await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS EmployeeTable
-                                              (
-                                                ""EmployeeId"" bigint,
-                                                EmployeeName text
-                                              )");
-
-            await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS Employee4s
-                                              (
-                                                Id bigint,
-                                                Name text,
-                                                DateUnixTimestamp bigint
-                                              )");
-
-            await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS ""Employee5""
-                                              (
-                                                ""Id"" bigint,
-                                                ""Name"" text,
-                                                ""Money"" numeric
-                                              )");
-        }
-
-        private async Task DropTables()
-        {
-            _connectionFactory = GetRequiredService<IDbConnectionFactory>();
-
-            var connection = _connectionFactory.CreateConnection(null);
-
-            await connection.ExecuteAsync(@"DROP TABLE IF EXISTS ""Employee1s""");
-            await connection.ExecuteAsync(@"DROP TABLE IF EXISTS MyEmployees");
-            await connection.ExecuteAsync(@"DROP TABLE IF EXISTS EmployeeTable");
-            await connection.ExecuteAsync(@"DROP TABLE IF EXISTS Employee4s");
-            await connection.ExecuteAsync(@"DROP TABLE IF EXISTS ""Employee5""");
+            await DatabaseHelper.DropTables(_connectionFactory.CreateConnection(null));
         }
 
         [SetUp]
