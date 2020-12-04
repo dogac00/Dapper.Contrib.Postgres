@@ -145,5 +145,26 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
             employeeRetrieved.Should().NotBeNull();
             employeeRetrieved.JsonEquals(employeeGiven).Should().BeTrue();
         }
+
+        [Test]
+        public async Task ShouldInsert_WhenGivenEmployeeClassWithOnlyQuoteAttribute()
+        {
+            var connection = _connectionFactory.CreateConnection(null);
+            
+            var employeeGiven = _fixture.Create<Employee6Type>();
+
+            await DatabaseHelper.InsertGeneric(connection, employeeGiven);
+
+            var employees =
+                await connection.QueryAsync<Employee6Type>(@"SELECT *
+                                                             FROM ""Employee6Types""");
+
+            var employeeList = employees as List<Employee6Type> ?? employees.ToList();
+            
+            employeeList.Count.Should().Be(1);
+            var employeeRetrieved = employeeList.FirstOrDefault();
+            employeeRetrieved.Should().NotBeNull();
+            employeeRetrieved.JsonEquals(employeeGiven).Should().BeTrue();
+        }
     }
 }
