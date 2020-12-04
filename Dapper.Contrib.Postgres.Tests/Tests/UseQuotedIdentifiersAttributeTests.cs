@@ -1,4 +1,4 @@
-using Dapper.Contrib.Postgres.Helpers;
+using Dapper.Contrib.Postgres.Tests.Helpers;
 using Dapper.Contrib.Postgres.Tests.TestTypes;
 using FluentAssertions;
 using NUnit.Framework;
