@@ -24,7 +24,7 @@ namespace Dapper.Contrib.Postgres
             return connection.QueryFirstOrDefault<long>(sql, entity);
         }
         
-        public static string GetInsertSql<T>()
+        private static string GetInsertSql<T>()
         {
             var insertInto = @"INSERT INTO";
             var tableName = GetTableName<T>();
@@ -38,15 +38,16 @@ namespace Dapper.Contrib.Postgres
             return $"{insertInto} {tableName} {columns} {values} {parameters} {returning};";
         }
 
-        public static List<string> GetColumnNames<T>()
+        private static List<string> GetColumnNames<T>()
         {
             return typeof(T)
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(p => !p.HasAttribute<AutoIncrementAttribute>())
                 .Select(GetColumnName<T>)
                 .ToList();
         }
 
-        public static string GetKeyName<T>()
+        private static string GetKeyName<T>()
         {
             var properties = typeof(T)
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -70,16 +71,17 @@ namespace Dapper.Contrib.Postgres
             return null;
         }
 
-        public static List<string> GetParameters<T>()
+        private static List<string> GetParameters<T>()
         {
             return typeof(T)
                 .GetProperties()
+                .Where(p => !p.HasAttribute<AutoIncrementAttribute>())
                 .Select(p => p.Name)
                 .Select(p => "@" + p)
                 .ToList();
         }
         
-        public static string GetColumnName<T>(PropertyInfo property)
+        private static string GetColumnName<T>(PropertyInfo property)
         {
             var columnAttribute = AttributeHelper.GetColumnAttribute(property);
 
@@ -98,7 +100,7 @@ namespace Dapper.Contrib.Postgres
             return property.Name;
         }
 
-        public static string GetTableName<T>()
+        private static string GetTableName<T>()
         {
             var typeName = typeof(T).Name;
             var pluralTypeName = Pluralizer.Pluralize(typeName);
