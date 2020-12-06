@@ -10,6 +10,13 @@ namespace Dapper.Contrib.Postgres
 {
     public static class Extensions
     {
+        /// <summary>
+        /// Inserts the given entity.
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="entity"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>The Id of the inserted entity.</returns>
         public static async Task<object> InsertAsync<T>(this IDbConnection connection, T entity)
         {
             var sql = GetInsertSql<T>();
@@ -17,6 +24,13 @@ namespace Dapper.Contrib.Postgres
             return await connection.QueryFirstOrDefaultAsync<long>(sql, entity);
         }
         
+        /// <summary>
+        /// Inserts the given entity.
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="entity"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>The Id of the inserted entity.</returns>
         public static object Insert<T>(this IDbConnection connection, T entity)
         {
             return InsertAsync(connection, entity)
