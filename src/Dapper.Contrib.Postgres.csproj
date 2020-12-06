@@ -6,6 +6,7 @@
         <Authors>Dogac Akyildiz</Authors>
         <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/dogac00/Dapper.Contrib.Postgres</RepositoryUrl>
+        <PackageVersion>1.0.1</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
