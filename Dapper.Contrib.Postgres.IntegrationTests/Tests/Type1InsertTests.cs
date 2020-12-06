@@ -19,6 +19,8 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
         public override async Task OneTimeSetUp()
         {
             await base.OneTimeSetUp();
+
+            _connectionFactory = GetRequiredService<IDbConnectionFactory>();
             
             var connection = _connectionFactory.CreateConnection();
 
@@ -79,12 +81,20 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
                 .CreateMany(count)
                 .ToList();
 
-            var shouldId = 1;
+            var shouldId = 2;
             foreach (var givenEntity in givenEntities)
             {
                 var id = await conn.InsertAsync(givenEntity);
-                id.Should().Be(shouldId);
-                shouldId++;
+
+                if (id is long longId)
+                {
+                    longId.Should().Be(shouldId);
+                    shouldId++;
+                }
+                else
+                {
+                    Assert.Fail();
+                }
             }
 
             var retrievedEntities = (await conn.QueryAsync<TestType1>(@"SELECT * FROM ""TestType1s"""))
