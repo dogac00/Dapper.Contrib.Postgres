@@ -10,26 +10,25 @@ namespace Dapper.Contrib.Postgres
 {
     public static class Extensions
     {
-        public static async Task<long> InsertAsync<T>(this IDbConnection connection, T entity)
+        public static async Task<object> InsertAsync<T>(this IDbConnection connection, T entity)
         {
             var sql = GetInsertSql<T>();
 
             return await connection.QueryFirstOrDefaultAsync<long>(sql, entity);
         }
         
-        public static long Insert<T>(this IDbConnection connection, T entity)
+        public static object Insert<T>(this IDbConnection connection, T entity)
         {
-            var sql = GetInsertSql<T>();
-
-            return connection.QueryFirstOrDefault<long>(sql, entity);
+            return InsertAsync(connection, entity)
+                .GetAwaiter()
+                .GetResult();
         }
         
         private static string GetInsertSql<T>()
         {
             var insertInto = @"INSERT INTO";
             var tableName = GetTableName<T>();
-            var columnNames = GetColumnNames<T>();
-            var columns = "(" + string.Join(',', columnNames) + ")";
+            var columns = "(" + string.Join(',', GetColumnNames<T>()) + ")";
             var values = "VALUES";
             var parameters = "(" + string.Join(',', GetParameters<T>()) + ")";
             var keyName = GetKeyName<T>();
@@ -83,16 +82,14 @@ namespace Dapper.Contrib.Postgres
         
         private static string GetColumnName<T>(PropertyInfo property)
         {
-            var columnAttribute = AttributeHelper.GetColumnAttribute(property);
+            var columnAttribute = property.GetAttribute<ColumnAttribute>();
 
             if (columnAttribute != null)
             {
                 return columnAttribute.Name;
             }
-            
-            var useQuotesAttribute = AttributeHelper.GetUseQuotedIdentifiersAttribute<T>();
-            
-            if (useQuotesAttribute != null)
+
+            if (typeof(T).HasAttribute<UseQuotedIdentifiersAttribute>())
             {
                 return property.Name.AddQuotes();
             }
@@ -104,16 +101,14 @@ namespace Dapper.Contrib.Postgres
         {
             var typeName = typeof(T).Name;
             var pluralTypeName = Pluralizer.Pluralize(typeName);
-            var tableAttribute = AttributeHelper.GetTableAttribute<T>();
+            var tableAttribute = typeof(T).GetAttribute<TableAttribute>();
 
             if (tableAttribute != null)
             {
                 return tableAttribute.Name;
             }
-            
-            var useQuotesAttributes = AttributeHelper.GetUseQuotedIdentifiersAttribute<T>();
 
-            if (useQuotesAttributes != null)
+            if (typeof(T).HasAttribute<UseQuotedIdentifiersAttribute>())
             {
                 return pluralTypeName.AddQuotes();
             }
