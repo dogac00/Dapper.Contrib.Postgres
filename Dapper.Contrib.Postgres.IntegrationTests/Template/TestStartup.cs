@@ -2,7 +2,7 @@ using Dapper.Contrib.Postgres.IntegrationTests.Connection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Dapper.Contrib.Postgres.IntegrationTests
+namespace Dapper.Contrib.Postgres.IntegrationTests.Template
 {
     public class TestStartup
     {
@@ -10,7 +10,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests
         {
             services.AddHealthChecks();
 
-            services.AddSingleton<IDbConnectionFactory, PosgtreSqlConnectionFactory>();
+            services.AddSingleton<IDbConnectionFactory, PostgreSqlConnectionFactory>();
         }
         
         public void Configure(IApplicationBuilder builder)

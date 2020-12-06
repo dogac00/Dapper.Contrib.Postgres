@@ -4,18 +4,18 @@ using Npgsql;
 
 namespace Dapper.Contrib.Postgres.IntegrationTests.Connection
 {
-    public class PosgtreSqlConnectionFactory : IDbConnectionFactory
+    public class PostgreSqlConnectionFactory : IDbConnectionFactory
     {
         private readonly IConfiguration _configuration;
 
-        public PosgtreSqlConnectionFactory(IConfiguration configuration)
+        public PostgreSqlConnectionFactory(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
         public IDbConnection CreateConnection()
         {
-            var connString = _configuration.GetValue<string>("PosgtreSqlConnectionString");
+            var connString = _configuration.GetValue<string>("PostgreSqlConnectionString");
             
             return new NpgsqlConnection(connString);
         }
