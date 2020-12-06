@@ -1,12 +1,13 @@
 using Dapper.Contrib.Postgres.Attributes;
 
-namespace Dapper.Contrib.Postgres.IntegrationTests.TestTypes
+namespace Dapper.Contrib.Postgres.TestTypes
 {
     [UseQuotedIdentifiers]
-    public class Employee6Type
+    [Table("\"Employee5\"")]
+    public class TestType18
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public decimal Balance { get; set; }
+        public decimal Money { get; set; }
     }
 }

@@ -1,10 +1,10 @@
 using Dapper.Contrib.Postgres.Attributes;
 
-namespace Dapper.Contrib.Postgres.IntegrationTests.TestTypes
+namespace Dapper.Contrib.Postgres.TestTypes
 {
     [UseQuotedIdentifiers]
     [Table("EmployeeTable")]
-    public class Employee3
+    public class TestType19
     {
         [Key] 
         public long EmployeeId { get; set; }

@@ -1,9 +1,9 @@
 using System;
 using Dapper.Contrib.Postgres.Attributes;
 
-namespace Dapper.Contrib.Postgres.Tests.TestTypes
+namespace Dapper.Contrib.Postgres.TestTypes
 {
-    public class TestClassWithMultipleProperties
+    public class TestType3
     {
         [Column("MyId")]
         public long Id { get; set; }

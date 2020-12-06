@@ -1,8 +1,8 @@
 using Dapper.Contrib.Postgres.Attributes;
 
-namespace Dapper.Contrib.Postgres.Tests.TestTypes
+namespace Dapper.Contrib.Postgres.TestTypes
 {
-    public class TestClassWithKeyAttribute
+    public class TestType2
     {
         [Key]
         public string MyKey { get; set; }

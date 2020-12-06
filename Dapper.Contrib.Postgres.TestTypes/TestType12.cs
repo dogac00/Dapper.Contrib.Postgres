@@ -1,9 +1,9 @@
 using Dapper.Contrib.Postgres.Attributes;
 
-namespace Dapper.Contrib.Postgres.Tests.Tests
+namespace Dapper.Contrib.Postgres.TestTypes
 {
     [UseQuotedIdentifiers]
-    public class TestClassWithoutKeyAttribute
+    public class TestType12
     {
         public string Id { get; set; }
     }

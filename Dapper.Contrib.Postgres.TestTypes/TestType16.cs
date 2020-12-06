@@ -1,9 +1,9 @@
 using Dapper.Contrib.Postgres.Attributes;
 
-namespace Dapper.Contrib.Postgres.IntegrationTests.TestTypes
+namespace Dapper.Contrib.Postgres.TestTypes
 {
     [Table("MyEmployees")]
-    public class Employee2
+    public class TestType16
     {
         [Column("MyFirstName")]
         public string FirstName { get; set; }

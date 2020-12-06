@@ -1,11 +1,11 @@
 using System;
 using Dapper.Contrib.Postgres.Attributes;
 
-namespace Dapper.Contrib.Postgres.Tests.TestTypes
+namespace Dapper.Contrib.Postgres.TestTypes
 {
     [UseQuotedIdentifiers]
     [Table("MyTestTable")]
-    public class TestClassWithQuoteTableAndColumnAttribute
+    public class TestType10
     {
         [Column("MyIntField")]
         public int IntField { get; set; }

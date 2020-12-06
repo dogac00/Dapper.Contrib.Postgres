@@ -1,6 +1,6 @@
-namespace Dapper.Contrib.Postgres.IntegrationTests.TestTypes
+namespace Dapper.Contrib.Postgres.TestTypes
 {
-    public class Employee4
+    public class TestType17
     {
         public int Id { get; set; }
         public string Name { get; set; }

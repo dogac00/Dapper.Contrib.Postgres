@@ -1,9 +1,9 @@
 using Dapper.Contrib.Postgres.Attributes;
 
-namespace Dapper.Contrib.Postgres.Tests.TestTypes
+namespace Dapper.Contrib.Postgres.TestTypes
 {
     [Table("TestTable")]
-    class TestClassWithTableAttribute
+    class TestType11
     {
         
     }
