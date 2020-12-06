@@ -2,9 +2,9 @@ using Dapper.Contrib.Postgres.Attributes;
 
 namespace Dapper.Contrib.Postgres.TestTypes
 {
-    public class TestType2
+    [Table("TestTable")]
+    public class TestType11
     {
-        [Key]
-        public string MyKey { get; set; }
+        
     }
 }

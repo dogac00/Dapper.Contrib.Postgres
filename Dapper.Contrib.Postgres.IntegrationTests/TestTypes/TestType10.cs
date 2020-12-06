@@ -7,9 +7,9 @@ namespace Dapper.Contrib.Postgres.TestTypes
     [Table("MyTestTable")]
     public class TestType10
     {
-        [Column("MyIntField")]
+        [Column("\"MyIntField\"")]
         public int IntField { get; set; }
-        [Column("MyDateTimeField")]
+        [Column("\"MyDateTimeField\"")]
         public DateTime DateTimeField { get; set; }
     }
 }
