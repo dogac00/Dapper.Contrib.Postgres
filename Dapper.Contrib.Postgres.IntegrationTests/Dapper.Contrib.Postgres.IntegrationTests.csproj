@@ -15,11 +15,11 @@
         <PackageReference Include="NUnit" Version="3.12.0" />
         <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
-        <PackageReference Include="System.Data.SQLite" Version="1.0.113.6" />
         <PackageReference Include="Dapper" Version="2.0.78" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Dapper.Contrib.Postgres.TestTypes\Dapper.Contrib.Postgres.TestTypes.csproj" />
       <ProjectReference Include="..\src\Dapper.Contrib.Postgres.csproj" />
     </ItemGroup>
 

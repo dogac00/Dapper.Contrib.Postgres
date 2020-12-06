@@ -14,7 +14,18 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Dapper.Contrib.Postgres.TestTypes\Dapper.Contrib.Postgres.TestTypes.csproj" />
       <ProjectReference Include="..\src\Dapper.Contrib.Postgres.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="AttributeTests" />
+      <Folder Include="GetColumnNamesTests" />
+      <Folder Include="GetColumnNameTests" />
+      <Folder Include="GetInsertSqlTests" />
+      <Folder Include="GetKeyNameTests" />
+      <Folder Include="GetParametersTests" />
+      <Folder Include="GetTableNameTests" />
     </ItemGroup>
 
 </Project>

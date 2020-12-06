@@ -10,7 +10,6 @@
 
     <ItemGroup>
       <PackageReference Include="Dapper" Version="2.0.78" />
-      <PackageReference Include="Pluralize.NET.Core" Version="1.0.0" />
     </ItemGroup>
 
 </Project>

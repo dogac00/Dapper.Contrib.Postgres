@@ -1,9 +1,8 @@
-using System.Data.Common;
-using System.Data.Entity.Infrastructure;
+using System.Data;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 
-namespace Dapper.Contrib.Postgres.IntegrationTests
+namespace Dapper.Contrib.Postgres.IntegrationTests.Connection
 {
     public class PosgtreSqlConnectionFactory : IDbConnectionFactory
     {
@@ -14,7 +13,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests
             _configuration = configuration;
         }
 
-        public DbConnection CreateConnection(string nameOrConnectionString)
+        public IDbConnection CreateConnection()
         {
             var connString = _configuration.GetValue<string>("PosgtreSqlConnectionString");
             

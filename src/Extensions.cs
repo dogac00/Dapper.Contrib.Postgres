@@ -5,14 +5,11 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Dapper.Contrib.Postgres.Attributes;
 using Dapper.Contrib.Postgres.Helpers;
-using Pluralize.NET.Core;
 
 namespace Dapper.Contrib.Postgres
 {
     public static class Extensions
     {
-        private static readonly Pluralizer _pluralizer = new Pluralizer();
-        
         public static async Task<long> InsertAsync<T>(this IDbConnection connection, T entity)
         {
             var sql = GetInsertSql<T>();
@@ -104,7 +101,7 @@ namespace Dapper.Contrib.Postgres
         public static string GetTableName<T>()
         {
             var typeName = typeof(T).Name;
-            var pluralTypeName = _pluralizer.Pluralize(typeName);
+            var pluralTypeName = Pluralizer.Pluralize(typeName);
             var tableAttribute = AttributeHelper.GetTableAttribute<T>();
 
             if (tableAttribute != null)

@@ -4,4 +4,8 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\src\Dapper.Contrib.Postgres.csproj" />
+    </ItemGroup>
+
 </Project>
