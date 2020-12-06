@@ -1,6 +1,6 @@
 using Dapper.Contrib.Postgres.Attributes;
 
-namespace Dapper.Contrib.Postgres.TestTypes
+namespace Dapper.Contrib.Postgres.IntegrationTests.TestTypes
 {
     [UseQuotedIdentifiers]
     [Table("\"Employee5\"")]

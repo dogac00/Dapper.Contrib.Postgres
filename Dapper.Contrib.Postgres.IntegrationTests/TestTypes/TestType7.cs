@@ -1,4 +1,4 @@
-namespace Dapper.Contrib.Postgres.TestTypes
+namespace Dapper.Contrib.Postgres.IntegrationTests.TestTypes
 {
     public class TestType7
     {
