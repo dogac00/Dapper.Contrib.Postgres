@@ -1,20 +1,19 @@
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace Dapper.Contrib.Postgres.IntegrationTests
+namespace Dapper.Contrib.Postgres.IntegrationTests.Template
 {
     public class IntegrationTestBase
     {
         private IServiceProvider _serviceProvider;
         
         [OneTimeSetUp]
-        public virtual Task OneTimeSetUp()
+        public virtual void OneTimeSetUp()
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -28,8 +27,6 @@ namespace Dapper.Contrib.Postgres.IntegrationTests
             
             var testServer = new TestServer(webHostBuilder);
             _serviceProvider = testServer.Services;
-
-            return Task.CompletedTask;
         }
 
         protected T GetRequiredService<T>()

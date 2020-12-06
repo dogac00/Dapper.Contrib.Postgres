@@ -1,3 +1,4 @@
+using Dapper.Contrib.Postgres.IntegrationTests.Template;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
