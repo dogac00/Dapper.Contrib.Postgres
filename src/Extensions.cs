@@ -43,7 +43,7 @@ namespace Dapper.Contrib.Postgres
 
         private static void SetId<T>(T entity, string id)
         {
-            var idProperty = GetKeyProperty(entity);
+            var idProperty = GetKeyProperty<T>();
             
             if (idProperty != null)
             {
@@ -99,7 +99,7 @@ namespace Dapper.Contrib.Postgres
             return null;
         }
 
-        private static PropertyInfo GetKeyProperty<T>(T entity)
+        private static PropertyInfo GetKeyProperty<T>()
         {
             return typeof(T)
                 .GetPublicProperties()
