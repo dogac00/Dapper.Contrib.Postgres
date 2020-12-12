@@ -29,13 +29,13 @@ namespace Dapper.Contrib.Postgres
 
         private static void SetId<T>(T entity, string id)
         {
-            var idProperty = GetKeyProperty<T>();
+            var keyProperty = GetKeyProperty<T>();
 
-            if (idProperty != null)
+            if (keyProperty != null)
             {
-                var idType = idProperty.PropertyType;
+                var idType = keyProperty.PropertyType;
                 var result = Convert.ChangeType(id, idType);
-                idProperty.SetValue(entity, result);
+                keyProperty.SetValue(entity, result);
             }
         }
 
