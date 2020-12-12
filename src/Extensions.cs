@@ -11,13 +11,6 @@ namespace Dapper.Contrib.Postgres
 {
     public static class Extensions
     {
-        /// <summary>
-        /// Inserts the given entity.
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="entity"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns>The Id of the inserted entity.</returns>
         public static async Task InsertAsync<T>(this IDbConnection connection, T entity)
         {
             var sql = GetInsertSql<T>();
@@ -27,13 +20,6 @@ namespace Dapper.Contrib.Postgres
             SetId(entity, id);
         }
         
-        /// <summary>
-        /// Inserts the given entity.
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="entity"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns>The Id of the inserted entity.</returns>
         public static void Insert<T>(this IDbConnection connection, T entity)
         {
             InsertAsync(connection, entity)
@@ -44,7 +30,7 @@ namespace Dapper.Contrib.Postgres
         private static void SetId<T>(T entity, string id)
         {
             var idProperty = GetKeyProperty<T>();
-            
+
             if (idProperty != null)
             {
                 var idType = idProperty.PropertyType;
@@ -52,7 +38,7 @@ namespace Dapper.Contrib.Postgres
                 idProperty.SetValue(entity, result);
             }
         }
-        
+
         private static string GetInsertSql<T>()
         {
             var insertInto = @"INSERT INTO";
@@ -115,7 +101,7 @@ namespace Dapper.Contrib.Postgres
                 .Select(p => "@" + p)
                 .ToList();
         }
-        
+
         private static string GetColumnName<T>(PropertyInfo property)
         {
             var columnAttribute = property.GetAttribute<ColumnAttribute>();
