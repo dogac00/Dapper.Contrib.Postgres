@@ -17,7 +17,7 @@ namespace Dapper.Contrib.Postgres
 
             var id = await connection.QueryFirstOrDefaultAsync<string>(sql, entity);
 
-            SetId(entity, id);
+            TrySetId(entity, id);
         }
         
         public static void Insert<T>(this IDbConnection connection, T entity)
@@ -27,7 +27,7 @@ namespace Dapper.Contrib.Postgres
                 .GetResult();
         }
 
-        private static void SetId<T>(T entity, string id)
+        private static void TrySetId<T>(T entity, string id)
         {
             var keyProperty = GetKeyProperty<T>();
 
