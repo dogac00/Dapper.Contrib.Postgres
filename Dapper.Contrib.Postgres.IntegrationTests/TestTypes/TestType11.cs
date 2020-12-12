@@ -2,9 +2,10 @@ using Dapper.Contrib.Postgres.Attributes;
 
 namespace Dapper.Contrib.Postgres.IntegrationTests.TestTypes
 {
-    [Table("TestTable")]
+    [UseQuotedIdentifiers]
     public class TestType11
     {
-        
+        public int Id { get; set; }
+        public string Data { get; set; }
     }
 }

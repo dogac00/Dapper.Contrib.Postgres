@@ -3,7 +3,6 @@ using Dapper.Contrib.Postgres.Attributes;
 
 namespace Dapper.Contrib.Postgres.IntegrationTests.TestTypes
 {
-    [UseQuotedIdentifiers]
     [Table("MyTestTable")]
     public class TestType10
     {

@@ -3,12 +3,13 @@ using Dapper.Contrib.Postgres.Attributes;
 namespace Dapper.Contrib.Postgres.IntegrationTests.TestTypes
 {
     [UseQuotedIdentifiers]
-    [Table("MyTable")]
+    [Table("TestType9")]
     public class TestType9
     {
-        [Column("FirstNameColumn")]
+        [Key]
+        [Column("Name")]
         public string FirstName { get; set; }
-        [Column("SecondNameColumn")]
+        [Column("LastName")]
         public string LastName { get; set; }
     }
 }
