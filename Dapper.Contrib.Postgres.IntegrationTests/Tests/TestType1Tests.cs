@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
+using AutoFixture;
 using Dapper.Contrib.Postgres.IntegrationTests.Connection;
 using Dapper.Contrib.Postgres.IntegrationTests.Template;
 using Dapper.Contrib.Postgres.IntegrationTests.TestTypes;
@@ -16,24 +16,26 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
         {
             var connection = GetRequiredService<IDbConnectionFactory>()
                 .CreateConnection();
-            
+
+            var givenId = Fixture.Create<long>();
             var givenItem = new TestType1
             {
-                Name = "employee name"
+                Id = givenId,
+                Name = Fixture.Create<string>()
             };
 
             await connection.InsertAsync(givenItem);
 
-            givenItem.Id.Should().Be(1);
-
             var items = (await connection
-                .QueryAsync<TestType1>(@"SELECT * FROM Employees"))
+                .QueryAsync<TestType1>(@"SELECT * FROM TestType1s"))
                 .ToList();
 
             items.Count.Should().Be(1);
             var retrievedItem = items.First();
 
-            retrievedItem.Id.Should().Be(givenItem.Id);
+            givenItem.Id.Should().Be(1);
+            retrievedItem.Id.Should().NotBe(givenId);
+            retrievedItem.Id.Should().Be(1);
             retrievedItem.Name.Should().Be(givenItem.Name);
         }
     }
