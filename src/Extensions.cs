@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -17,11 +18,13 @@ namespace Dapper.Contrib.Postgres
         /// <param name="entity"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns>The Id of the inserted entity.</returns>
-        public static async Task<object> InsertAsync<T>(this IDbConnection connection, T entity)
+        public static async Task InsertAsync<T>(this IDbConnection connection, T entity)
         {
             var sql = GetInsertSql<T>();
 
-            return await connection.QueryFirstOrDefaultAsync<long>(sql, entity);
+            var id = await connection.QueryFirstOrDefaultAsync<string>(sql, entity);
+
+            SetId(entity, id);
         }
         
         /// <summary>
@@ -31,11 +34,23 @@ namespace Dapper.Contrib.Postgres
         /// <param name="entity"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns>The Id of the inserted entity.</returns>
-        public static object Insert<T>(this IDbConnection connection, T entity)
+        public static void Insert<T>(this IDbConnection connection, T entity)
         {
-            return InsertAsync(connection, entity)
+            InsertAsync(connection, entity)
                 .GetAwaiter()
                 .GetResult();
+        }
+
+        private static void SetId<T>(T entity, string id)
+        {
+            var idProperty = GetKeyProperty(entity);
+            
+            if (idProperty != null)
+            {
+                var idType = idProperty.PropertyType;
+                var result = Convert.ChangeType(id, idType);
+                idProperty.SetValue(entity, result);
+            }
         }
         
         private static string GetInsertSql<T>()
@@ -54,7 +69,7 @@ namespace Dapper.Contrib.Postgres
         private static List<string> GetColumnNames<T>()
         {
             return typeof(T)
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .GetPublicProperties()
                 .Where(p => !p.HasAttribute<AutoIncrementAttribute>())
                 .Select(GetColumnName<T>)
                 .ToList();
@@ -63,7 +78,7 @@ namespace Dapper.Contrib.Postgres
         private static string GetKeyName<T>()
         {
             var properties = typeof(T)
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                .GetPublicProperties();
 
             var idProperty = properties.FirstOrDefault(p =>
                 p.Name == "Id" || p.Name == "\"Id\"");
@@ -82,6 +97,13 @@ namespace Dapper.Contrib.Postgres
             }
 
             return null;
+        }
+
+        private static PropertyInfo GetKeyProperty<T>(T entity)
+        {
+            return typeof(T)
+                .GetPublicProperties()
+                .FirstOrDefault(p => p.IsIdProperty());
         }
 
         private static List<string> GetParameters<T>()
