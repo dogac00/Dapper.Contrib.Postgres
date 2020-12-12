@@ -1,4 +1,4 @@
-namespace Dapper.Contrib.Postgres
+namespace Dapper.Contrib.Postgres.Helpers
 {
     internal static class Pluralizer
     {
