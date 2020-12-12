@@ -14,5 +14,11 @@ namespace Dapper.Contrib.Postgres.Helpers
         {
             return type.GetCustomAttribute(typeof(T)) as T;
         }
+        
+        public static PropertyInfo[] GetPublicProperties(this Type type)
+        {
+            return type
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        }
     }
 }
