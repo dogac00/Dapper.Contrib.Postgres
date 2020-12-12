@@ -31,12 +31,14 @@ namespace Dapper.Contrib.Postgres
         {
             var keyProperty = GetKeyProperty<T>();
 
-            if (keyProperty != null)
+            if (keyProperty == null)
             {
-                var idType = keyProperty.PropertyType;
-                var result = Convert.ChangeType(id, idType);
-                keyProperty.SetValue(entity, result);
+                return;
             }
+            
+            var idType = keyProperty.PropertyType;
+            var result = Convert.ChangeType(id, idType);
+            keyProperty.SetValue(entity, result);
         }
 
         private static string GetInsertSql<T>()
