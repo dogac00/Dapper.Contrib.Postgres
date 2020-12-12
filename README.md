@@ -14,15 +14,21 @@ await connection.InsertAsync(item);
 ```
 
 You can use `UseQuotedIdentifiers` attribute to generate your sql with quotes:
-```
+``` cs
 [UseQuotedIdentifiers]
 class Employee
 {
   public long Id { get; set; }
   public string Name { get; set; }
 }
+```
 
-var employee = new Employee ...
-
-await connection.InsertAsync(employee);
+You can use `Table` attribute to generate your sql with specified table:
+``` cs
+[Table("tbl_employee")]
+class Employee
+{
+  public long Id { get; set; }
+  public string Name { get; set; }
+}
 ```
