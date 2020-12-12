@@ -19,7 +19,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Dapper.Contrib.Postgres.TestTypes\Dapper.Contrib.Postgres.TestTypes.csproj" />
       <ProjectReference Include="..\src\Dapper.Contrib.Postgres.csproj" />
     </ItemGroup>
 
