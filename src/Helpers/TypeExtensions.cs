@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Dapper.Contrib.Postgres.Helpers
 {
-    public static class TypeExtensions
+    internal static class TypeExtensions
     {
         public static bool HasAttribute<T>(this Type type) where T : Attribute
         {

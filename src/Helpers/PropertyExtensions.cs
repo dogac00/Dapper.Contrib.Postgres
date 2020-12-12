@@ -3,7 +3,7 @@ using Dapper.Contrib.Postgres.Attributes;
 
 namespace Dapper.Contrib.Postgres.Helpers
 {
-    public static class PropertyExtensions
+    internal static class PropertyExtensions
     {
         public static bool IsIdProperty(this PropertyInfo propertyInfo)
         {
