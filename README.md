@@ -1,5 +1,8 @@
 # Dapper.Contrib.Postgres
 
+This library is designed for Insert and InsertAsync operations with extensions to `IDbConnection` interface.
+Because of the issues is *Dapper.Contrib* library, we can have some problems with insert operations whether or not we use quoted or unquoted identifiers.
+
 Currently supporting `Insert` and `InsertAsync` operations.
 ``` cs
 var item = new Entity { ... };
