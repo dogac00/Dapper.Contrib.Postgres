@@ -81,7 +81,7 @@ namespace Dapper.Contrib.Postgres
         private static List<string> GetParameters<T>()
         {
             return typeof(T)
-                .GetProperties()
+                .GetPublicProperties()
                 .Where(p => !p.HasAttribute<AutoIncrementAttribute>())
                 .Select(p => p.Name)
                 .Select(p => "@" + p)
