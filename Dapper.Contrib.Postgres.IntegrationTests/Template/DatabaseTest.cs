@@ -41,6 +41,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Template
             await connection.ExecuteAsync(TestType11.CreateTableScript());
             await connection.ExecuteAsync(TestType12.CreateTableScript());
             await connection.ExecuteAsync(TestType13.CreateTableScript());
+            await connection.ExecuteAsync(TestType14.CreateTableScript());
         }
 
         private async Task DatabaseTeardown()
@@ -61,6 +62,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Template
             await connection.ExecuteAsync(TestType11.DropTableScript());
             await connection.ExecuteAsync(TestType12.DropTableScript());
             await connection.ExecuteAsync(TestType13.DropTableScript());
+            await connection.ExecuteAsync(TestType14.DropTableScript());
         }
     }
 }
