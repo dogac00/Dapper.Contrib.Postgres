@@ -56,5 +56,18 @@ namespace Dapper.Contrib.Postgres.Helpers
             return type
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance);
         }
+
+        public static bool IsIntegralType(this Type type)
+        {
+            return type == typeof(sbyte) ||
+                   type == typeof(byte) ||
+                   type == typeof(short) ||
+                   type == typeof(ushort) ||
+                   type == typeof(int) ||
+                   type == typeof(uint) ||
+                   type == typeof(long) ||
+                   type == typeof(ulong);
+
+        }
     }
 }
