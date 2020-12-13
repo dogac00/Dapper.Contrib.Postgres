@@ -24,13 +24,13 @@ namespace Dapper.Contrib.Postgres.Helpers
 
             return pluralTypeName;
         }
-        
+
         public static string GetKeyName(this Type type)
         {
             var keyProperty = type.GetKeyProperty();
 
-            return keyProperty == null 
-                ? null 
+            return keyProperty == null
+                ? null
                 : keyProperty.GetColumnName(type);
         }
 
@@ -40,17 +40,17 @@ namespace Dapper.Contrib.Postgres.Helpers
                 .GetPublicProperties()
                 .FirstOrDefault(p => p.IsIdProperty());
         }
-        
+
         public static bool HasAttribute<T>(this Type type) where T : Attribute
         {
-            return type.GetCustomAttribute(typeof(T)) != null;
+            return type.GetAttribute<T>() != null;
         }
-        
+
         public static T GetAttribute<T>(this Type type) where T : Attribute
         {
             return type.GetCustomAttribute(typeof(T)) as T;
         }
-        
+
         public static PropertyInfo[] GetPublicProperties(this Type type)
         {
             return type
@@ -59,15 +59,14 @@ namespace Dapper.Contrib.Postgres.Helpers
 
         public static bool IsIntegralType(this Type type)
         {
-            return type == typeof(sbyte) ||
+            return type == typeof(int) ||
+                   type == typeof(long) ||
+                   type == typeof(sbyte) ||
                    type == typeof(byte) ||
                    type == typeof(short) ||
                    type == typeof(ushort) ||
-                   type == typeof(int) ||
                    type == typeof(uint) ||
-                   type == typeof(long) ||
                    type == typeof(ulong);
-
         }
     }
 }
