@@ -10,5 +10,19 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.TestTypes
         [Key]
         [AutoIncrement]
         public string LastName { get; set; }
+
+        public static string CreateTableScript()
+        {
+            return @"create table if not exists ""TestType8s""
+                    (
+                        MyFirstName text,
+                        ""LastName"" text constraint test_type8_pk primary key
+                    );";
+        }
+        
+        public static string DropTableScript()
+        {
+            return @"drop table if exists ""TestType8s"";";
+        }
     }
 }
