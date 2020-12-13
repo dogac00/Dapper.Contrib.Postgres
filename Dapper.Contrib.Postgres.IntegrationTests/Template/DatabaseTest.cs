@@ -13,6 +13,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Template
         [SetUp]
         public virtual async Task SetUp()
         {
+            await DatabaseTeardown();
             await DatabaseSetUp();
         }
 
@@ -34,6 +35,12 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Template
             await connection.ExecuteAsync(TestType5.CreateTableScript());
             await connection.ExecuteAsync(TestType6.CreateTableScript());
             await connection.ExecuteAsync(TestType7.CreateTableScript());
+            await connection.ExecuteAsync(TestType8.CreateTableScript());
+            await connection.ExecuteAsync(TestType9.CreateTableScript());
+            await connection.ExecuteAsync(TestType10.CreateTableScript());
+            await connection.ExecuteAsync(TestType11.CreateTableScript());
+            await connection.ExecuteAsync(TestType12.CreateTableScript());
+            await connection.ExecuteAsync(TestType13.CreateTableScript());
         }
 
         private async Task DatabaseTeardown()
@@ -48,6 +55,12 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Template
             await connection.ExecuteAsync(TestType5.DropTableScript());
             await connection.ExecuteAsync(TestType6.DropTableScript());
             await connection.ExecuteAsync(TestType7.DropTableScript());
+            await connection.ExecuteAsync(TestType8.DropTableScript());
+            await connection.ExecuteAsync(TestType9.DropTableScript());
+            await connection.ExecuteAsync(TestType10.DropTableScript());
+            await connection.ExecuteAsync(TestType11.DropTableScript());
+            await connection.ExecuteAsync(TestType12.DropTableScript());
+            await connection.ExecuteAsync(TestType13.DropTableScript());
         }
     }
 }
