@@ -12,6 +12,8 @@ namespace Dapper.Contrib.Postgres
     {
         public static async Task InsertAsync<T>(this IDbConnection connection, T entity)
         {
+            ValidateAutoIncrementAttributes<T>();
+            
             var sql = GetInsertSql<T>();
 
             var id = await connection.QueryFirstOrDefaultAsync<string>(sql, entity);
@@ -24,6 +26,19 @@ namespace Dapper.Contrib.Postgres
             InsertAsync(connection, entity)
                 .GetAwaiter()
                 .GetResult();
+        }
+
+        private static void ValidateAutoIncrementAttributes<T>()
+        {
+            var autoIncrementProperties = typeof(T)
+                .GetPublicProperties()
+                .Where(p => p.HasAttribute<AutoIncrementAttribute>())
+                .ToList();
+
+            if (autoIncrementProperties.Any(p => !p.PropertyType.IsIntegralType()))
+            {
+                throw new InvalidOperationException("Only integral types can be auto increment.");
+            }
         }
         
         private static string GetInsertSql<T>()
