@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
                 .CreateConnection();
 
             var index = 1;
-            var givenCount = 250; //new Random().Next(250);
+            var givenCount = new Random().Next(250);
 
             for (var i = 0; i < givenCount; i++)
             {
@@ -62,7 +63,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
         {
             var conn = GetRequiredService<IDbConnectionFactory>()
                 .CreateConnection();
-            var count = 250; //new Random().Next(500);
+            var count = new Random().Next(500);
             var givenItems = new List<TestType14>();
 
             for (var i = 0; i < count; i++)
