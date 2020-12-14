@@ -47,9 +47,10 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
             var conn = GetRequiredService<IDbConnectionFactory>()
                 .CreateConnection();
 
+            var count = new Random().Next(500);
             var index = 1;
 
-            for (var i = 0; i < 250; i++)
+            for (var i = 0; i < count; i++)
             {
                 var item = Fixture.Create<TestType13>();
                 await conn.InsertAsync(item);
@@ -57,9 +58,9 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
                 item.Id.Should().Be(index++);
             }
 
-            var count = await conn.QueryFirstAsync<int>(@"select count(*) from ""TestType13s"";");
+            var retrievedCount = await conn.QueryFirstAsync<int>(@"select count(*) from ""TestType13s"";");
 
-            count.Should().Be(250);
+            retrievedCount.Should().Be(count);
         }
         
         [Test]
@@ -67,7 +68,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
         {
             var conn = GetRequiredService<IDbConnectionFactory>()
                 .CreateConnection();
-            var count = new Random().Next(2500);
+            var count = new Random().Next(500);
             var givenItems = new List<TestType13>();
 
             for (var i = 0; i < count; i++)
@@ -81,7 +82,7 @@ namespace Dapper.Contrib.Postgres.IntegrationTests.Tests
 
             retrievedItems.Should().HaveCount(count);
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 var retrievedItem = retrievedItems[i];
                 var item = givenItems[i];
